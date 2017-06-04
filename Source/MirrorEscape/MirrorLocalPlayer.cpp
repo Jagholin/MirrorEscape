@@ -226,7 +226,7 @@ bool UMirrorLocalPlayer::GetProjectionData(FViewport* Viewport, EStereoscopicPas
 	if (result)
 	{
 		for (unsigned int i = 0; i < 4; ++i)
-			ProjectionData.ViewRotationMatrix.M[i][0] *= -1;
+			ProjectionData.ViewRotationMatrix.M[0][i] *= -1;
 		UE_LOG(MirrorLocalPlayer, Log, TEXT("GetProjectionData executed OK"));
 	}
 
