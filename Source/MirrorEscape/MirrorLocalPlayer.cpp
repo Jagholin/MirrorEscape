@@ -7,6 +7,8 @@
 #include "Engine/Player.h"
 #include "AssertionMacros.h"
 #include "SceneViewExtension.h"
+#include "MirrorPlayerState.h"
+#include "GameFramework/PlayerController.h"
 
 DEFINE_LOG_CATEGORY(MirrorLocalPlayer);
 
@@ -223,11 +225,14 @@ bool UMirrorLocalPlayer::GetProjectionData(FViewport* Viewport, EStereoscopicPas
 {
 	bool result = Super::GetProjectionData(Viewport, StereoPass, ProjectionData);
 
-	if (result)
+	APlayerController* myController = GetPlayerController(GetWorld());
+	APlayerState* baseState = myController->PlayerState;
+	auto *myState = Cast<AMirrorPlayerState>(baseState);
+
+	if (result && myState && myState->bMirrorModeActive)
 	{
 		for (unsigned int i = 0; i < 4; ++i)
 			ProjectionData.ViewRotationMatrix.M[i][0] *= -1;
-		UE_LOG(MirrorLocalPlayer, Log, TEXT("GetProjectionData executed OK"));
 	}
 
 	return result;
